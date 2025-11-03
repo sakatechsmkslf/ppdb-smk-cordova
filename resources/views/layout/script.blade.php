@@ -8,6 +8,13 @@
  <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
  <script src="{{ asset('template/js/adminlte.js') }}"></script>
  <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ {{-- <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script> --}}
+ <script src="{{ asset('template/js/adminlte.js') }}"></script>
+ <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
  <script>
      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
      const Default = {
