@@ -48,7 +48,7 @@
                             <a class="nav-link text-white" href="{{ route('pendaftaran.create') }}">Daftar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('informasi') }}">Informasi</a>
+                            <a class="nav-link text-white" href="{{ route('informasi.index') }}">Informasi</a>
                         </li>
                     </ul>
                 </div>
@@ -78,7 +78,7 @@
             </small>
 
             <div class="mt-3">
-                <a href="{{ route('informasi') }}" class="text-white text-decoration-none me-3">Informasi</a>
+                <a href="{{ route('informasi.index') }}" class="text-white text-decoration-none me-3">Informasi</a>
                 <a href="{{ route('daftar') }}" class="text-white text-decoration-none">Daftar</a>
             </div>
 
