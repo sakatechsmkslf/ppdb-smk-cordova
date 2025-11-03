@@ -27,6 +27,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register')->name('register');
 });
 
+Route::get('provinces', [App\Http\Controllers\DaerahController::class, 'provinces'])->name('provinces');
+Route::get('cities', [App\Http\Controllers\DaerahController::class, 'cities'])->name('cities');
+Route::get('districts', [App\Http\Controllers\DaerahController::class, 'districts'])->name('districts');
+Route::get('villages', [App\Http\Controllers\DaerahController::class, 'villages'])->name('villages');
 Route::resource('pendaftaran', PendaftarController::class);
 
 
