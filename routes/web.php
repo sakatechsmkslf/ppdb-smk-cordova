@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GelombangController;
+use App\Http\Controllers\PendaftarController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +23,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('viewRegister', 'viewRegister')->name('viewRegister');
     Route::post('register', 'register')->name('register');
 });
+
+Route::resource('pendaftaran', PendaftarController::class);
 
 
 Route::middleware(['auth'])->group(function () {
