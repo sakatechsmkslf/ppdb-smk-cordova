@@ -228,11 +228,12 @@
                         @endphp
                         <select name="provinsi" id="provinsi" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Provinsi</option>
-                            @foreach ($provinces as $province)
-                                <option value="{{ $province->id }}"
-                                    {{ old('provinsi') == $province->id ? 'selected' : '' }}>
-                                    {{ $province->name }}</option>
-                            @endforeach
+                                                @foreach ($provinces as $item)
+                                                    <option value=""></option>
+                                                    <option value="{{ $item->id ?? '' }}"
+                                                        @if (old('prov_id') == $item->id) {{ 'selected' }} @endif>
+                                                        {{ $item->name ?? '' }}</option>
+                                                @endforeach
                         </select>
                         @error('provinsi')
                             <div class="text-danger small">{{ $message }}</div>
@@ -241,18 +242,18 @@
 
                     <div class="col-md-3 mb-4">
                         <label class="mb-2 small fw-bold required">Kabupaten</label>
-                        @php
+                        {{-- @php
                             $provinces = new App\Http\Controllers\DaerahController();
                             $cities = $provinces->cities_all();
-                        @endphp
+                        @endphp --}}
 
                         <select name="kabupaten" id="kabupaten" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Kabupaten</option>
-                            @foreach ($cities as $city)
+                            {{-- @foreach ($cities as $city)
                                 <option value="{{ $city->id }}"
                                     {{ old('kabupaten') == $city->id ? 'selected' : '' }}>
                                     {{ $city->name }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                         @error('kabupaten')
                             <div class="text-danger small">{{ $message }}</div>
@@ -261,17 +262,17 @@
 
                     <div class="col-md-3 mb-4">
                         <label class="mb-2 small fw-bold required">Kecamatan</label>
-                        @php
+                        {{-- @php
                             $provinces = new App\Http\Controllers\DaerahController();
                             $districts = $provinces->districts_all();
-                        @endphp
+                        @endphp --}}
                         <select name="kecamatan" id="kecamatan" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Kecamatan</option>
-                            @foreach ($districts as $district)
+                            {{-- @foreach ($districts as $district)
                                 <option value="{{ $district->id }}"
                                     {{ old('kecamatan') == $district->id ? 'selected' : '' }}>
                                     {{ $district->name }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                         @error('kecamatan')
                             <div class="text-danger small">{{ $message }}</div>
@@ -280,16 +281,17 @@
 
                     <div class="col-md-3 mb-4">
                         <label class="mb-2 small fw-bold required">Desa/Kelurahan</label>
-                        @php
-                            $provinces = new App\Http\Controllers\HelperController();
+                        {{-- @php
+                            $provinces = new App\Http\Controllers\DaerahController();
                             $villages = $provinces->villages_all();
-                        @endphp
+                        @endphp --}}
                         <select name="desa" id="desa" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Desa</option>
-                            @foreach ($villages as $village)
-                                <option value="{{ $village->id }}" {{ old('desa') == $village->id ? 'selected' : '' }}>
+                            {{-- @foreach ($villages as $village)
+                                <option value="{{ $village->id ?? ''}}" {{ old('desa') == $village->id ? 'selected' : '' }}>
                                     {{ $village->name }}</option>
-                            @endforeach
+                            @endforeach --}}
+
                         </select>
                         @error('desa')
                             <div class="text-danger small">{{ $message }}</div>
@@ -673,41 +675,46 @@
             $('.sel2').select2({
                 theme: 'bootstrap-5',
                 width: '100%',
-                placeholder: function() { return $(this).data('placeholder') || 'Pilih'; }
+                placeholder: function() {
+                    return $(this).data('placeholder') || 'Pilih';
+                }
             });
-
-            // gunakan id yang sesuai dengan HTML: provinsi, kabupaten, kecamatan, desa
-            $('#provinsi').on('change', function() {
-                onChangeSelect('{{ route('cities') }}', $(this).val(), '#kabupaten');
-            });
-
-            $('#kabupaten').on('change', function() {
-                onChangeSelect('{{ route('districts') }}', $(this).val(), '#kecamatan');
-            });
-
-            $('#kecamatan').on('change', function() {
-                onChangeSelect('{{ route('villages') }}', $(this).val(), '#desa');
-            });
-
-            function onChangeSelect(url, id, targetSelector) {
-                $(targetSelector).empty().append('<option value="">Loading...</option>');
-                $.get(url, { id: id })
-                    .done(function(data) {
-                        $(targetSelector).empty().append('<option value="">Pilih</option>');
-                        data.forEach(function(item) {
-                            $(targetSelector).append(`<option value="${item.id}">${item.name}</option>`);
-                        });
-                        $(targetSelector).trigger('change.select2');
-                    })
-                    .fail(function() {
-                        $(targetSelector).empty().append('<option value="">Gagal memuat</option>');
-                    });
-            }
         });
+    </script>
 
+    <script>
+        function onChangeSelect(url, id, name) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    $('#' + name).empty();
+                    $('#' + name).append('<option>Pilih Salah Satu</option>');
+                    $.each(data, function(key, value) {
+                        $('#' + name).append('<option value="' + key + '">' + value + '</option>');
+                    });
+                }
+            });
+        }
+        $(function() {
+            $('#provinsi').on('change', function() {
+                onChangeSelect('{{ route("cities") }}', $(this).val(), 'kabupaten');
+            });
+            $('#kabupaten').on('change', function() {
+                onChangeSelect('{{ route("districts") }}', $(this).val(), 'kecamatan');
+            })
+            $('#kecamatan').on('change', function() {
+                onChangeSelect('{{ route("villages") }}', $(this).val(), 'desa');
+            })
+        });
+    </script>
+
+    <script type='text/javascript'>
         window.addEventListener('load', function() {
-            var pl = document.querySelector('.pre-loader');
-            if (pl) pl.classList.add('hidden');
+            document.querySelector('.pre-loader').className += ' hidden';
         });
     </script>
 @endpush
