@@ -9,4 +9,8 @@ class Pendaftar extends Model
     protected $guarded = [];
 
 
+    public function gelombang()
+    {
+        return $this->belongsTo(Gelombang::class);
+    }
 }
