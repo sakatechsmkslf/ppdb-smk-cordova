@@ -45,7 +45,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('daftar') }}">Daftar</a>
+                            <a class="nav-link text-white" href="{{ route('pendaftaran.create') }}">Daftar</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('informasi.index') }}">Informasi</a>

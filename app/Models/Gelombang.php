@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gelombang extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
@@ -22,4 +23,5 @@ class Gelombang extends Model
     {
         return $this->hasMany(Pendaftar::class);
     }
+
 }
