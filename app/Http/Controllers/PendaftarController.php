@@ -9,6 +9,7 @@ use Intervention\Image\Encoders\AutoEncoder;
 use Intervention\Image\ImageManager;
 use Laravolt\Indonesia;
 use Validator;
+use Carbon\Carbon;
 
 class PendaftarController extends Controller
 {
@@ -36,7 +37,6 @@ class PendaftarController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            "nomor_pendaftaran" => "required",
             "jurusan" => "required",
             "nama_lengkap" => "required",
             "no_hp" => "required",
@@ -78,6 +78,25 @@ class PendaftarController extends Controller
             return redirect()->route('pendaftar.create')->withErrors($validate)->withInput();
         }
 
+          // === Generate nomor pendaftaran otomatis ===
+        $today = Carbon::now()->format('Ymd'); // contoh: 20251104
+        $prefix = 'PMB' . $today; // contoh: PMB20251104
+
+        // cari nomor terakhir hari ini
+        $last = Pendaftar::where('nomor_pendaftaran', 'like', $prefix . '%')
+            ->orderBy('nomor_pendaftaran', 'desc')
+            ->first();
+
+        if ($last) {
+            // ambil 4 digit terakhir lalu tambahkan 1
+            $lastNumber = intval(substr($last->nomor_pendaftaran, -4)) + 1;
+        } else {
+            $lastNumber = 1;
+        }
+
+          // format jadi 4 digit (0001, 0002, dst)
+        $nomorPendaftaran = $prefix . str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
+
         //img interevention
         $manager = ImageManager::withDriver(new Driver());
 
@@ -103,7 +122,7 @@ class PendaftarController extends Controller
         $imageAkta->encode(new AutoEncoder(50))->save(public_path('akta/' . $imageNameAkta));
 
         $pendaftar = Pendaftar::create([
-            "nomor_pendaftaran" => $request->nomor_pendafataran,
+            "nomor_pendaftaran" => $nomorPendaftaran,
             "jurusan" => $request->jurusan,
             "nama_lengkap" => $request->nama_lengkap,
             "no_hp" => $request->no_hp,
