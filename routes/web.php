@@ -5,9 +5,16 @@ use App\Http\Controllers\GelombangController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('dashboard.index');
+})->name('home');
 
+Route::get('/informasi', function () {
+    return view('user.informasi');
+})->name('informasi');
+
+Route::get('/daftar', function () {
+    return view('user.index');
+})->name('daftar');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('viewLogin', 'viewLogin')->name('viewLogin');
@@ -22,3 +29,4 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
+
