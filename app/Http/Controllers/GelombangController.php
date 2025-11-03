@@ -52,7 +52,11 @@ class GelombangController extends Controller
         // }
         //! diganti sesuai viewnya. (view ini hanya untuk kebutuhan testing tambah)
         //! jika sudah diganti maka hapus comment ini
-        return view('gelombang.tambah');
+        return view('gelombang.aksi', [
+            'title' => 'Tambah Gelombang',
+            'route' => 'gelombang',
+            'gelombang' => null,
+        ]);
     }
 
     /**
@@ -79,8 +83,9 @@ class GelombangController extends Controller
         Gelombang::create([
             "tapel" => $request->tapel,
             "judul" => $request->judul,
-            "is_active" => "aktif"
+            "is_active" => $request->is_active
         ]);
+
 
         return redirect()->route('gelombang.index')->with('success', 'Berhasil Tambah Gelombang');
     }
@@ -98,16 +103,19 @@ class GelombangController extends Controller
      */
     public function edit(string $id)
     {
-        $user = auth()->user();
-        if (!$user->can('manage gelombang')) {
-            return redirect()->back()->with('error', 'Anda tidak mempunya permission');
-        }
+        // $user = auth()->user();
+        // if (!$user->can('manage gelombang')) {
+        //     return redirect()->back()->with('error', 'Anda tidak mempunya permission');
+        // }
 
         $gelombang = Gelombang::find($id);
 
         //! diganti sesuai viewnya. (view ini hanya untuk kebutuhan testing edit data)
         //! jika sudah diganti maka hapus comment ini
-        return view('gelombang.edit', compact('gelombang'));
+        return view('gelombang.aksi', compact('gelombang'), [
+            'title' => 'Edit Gelombang',
+            'route' => 'gelombang',
+        ]);
     }
 
     /**
@@ -145,10 +153,10 @@ class GelombangController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = auth()->user();
-        if (!$user->can('manage gelombang')) {
-            return redirect()->back()->with('error', 'Anda tidak mempunyai permission');
-        }
+        // $user = auth()->user();
+        // if (!$user->can('manage gelombang')) {
+        //     return redirect()->back()->with('error', 'Anda tidak mempunyai permission');
+        // }
         $target = Gelombang::find($id);
 
         if ($target->is_active == 'ya') {

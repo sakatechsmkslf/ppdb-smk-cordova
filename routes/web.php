@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GelombangController;
 use App\Http\Controllers\PendaftarController;
+use App\Models\Gelombang;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,6 +17,8 @@ Route::get('/informasi', function () {
 Route::get('/daftar', function () {
     return view('user.index');
 })->name('daftar');
+
+Route::resource('gelombang', GelombangController::class);
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('viewLogin', 'viewLogin')->name('viewLogin');

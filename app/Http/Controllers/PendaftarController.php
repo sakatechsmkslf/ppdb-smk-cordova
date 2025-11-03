@@ -18,7 +18,7 @@ class PendaftarController extends Controller
     public function index()
     {
         $pendaftar = Pendaftar::all();
-        return view('', compact('pendaftar'));
+        return view('pendaftar.main', compact('pendaftar'));
     }
 
     /**
@@ -26,8 +26,8 @@ class PendaftarController extends Controller
      */
     public function create()
     {
-        $provinsi = Indonesia::allProvince();
-        return view('', compact('provinsi'));
+        $provinsi = \Indonesia::allProvinces();
+        return view('user.index', compact('provinsi'));
     }
 
     /**
