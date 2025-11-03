@@ -5,32 +5,51 @@ namespace App\Http\Controllers;
 use App\Models\Gelombang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class GelombangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // $user = auth()->user();
+        // if (!$user->can('manage gelombang')) {
+        //     return redirect()->back()->with('error', 'Anda tidak mempunya permission');
+        // }
 
-        $user = auth()->user();
-        if (!$user->hasAnyPermission(['manage gelombang'])) {
-            return redirect()->back()->with('error', 'Anda tidak mempunya permission');
+        // $data = Gelombang::latest()->get();
+        // dd($data);
+
+        if ($request->ajax()) {
+            // gunakan query builder langsung, jangan ->get()
+            $query = Gelombang::latest();
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->editColumn('is_active', function ($row) {
+                    return $row->is_active === 'ya'
+                        ? '<span class="badge bg-success">Aktif</span>'
+                        : '<span class="badge bg-secondary">Tidak Aktif</span>';
+                })
+                ->addColumn('action', function ($row) {
+                    return view('gelombang.actions', compact('row'))->render();
+                })
+                ->rawColumns(['action', 'is_active'])
+                ->make(true);
         }
-        $gelombang = Gelombang::all();
 
-        //! diganti sesuai viewnya. (view ini hanya untuk kebutuhan testing tampil data)
-        //! jika sudah diganti maka hapus comment ini
-        return view('gelombang.main', compact('gelombang'));
+        return view('gelombang.main');
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $user = auth()->user();
-        if (!$user->can('manage gelombang')) {
-            return redirect()->back()->with('error', 'Anda tidak mempunya permission');
-        }
+        // $user = auth()->user();
+        // if (!$user->can('manage gelombang')) {
+        //     return redirect()->back()->with('error', 'Anda tidak mempunya permission');
+        // }
         //! diganti sesuai viewnya. (view ini hanya untuk kebutuhan testing tambah)
         //! jika sudah diganti maka hapus comment ini
         return view('gelombang.tambah');
@@ -137,6 +156,6 @@ class GelombangController extends Controller
         }
 
         $target->delete();
-        return redirect()->route('Gelombang.index')->with('success', 'Berhasil Hapus Gelombang');
+        return redirect()->route('gelombang.index')->with('success', 'Berhasil Hapus Gelombang');
     }
 }

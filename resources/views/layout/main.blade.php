@@ -5,6 +5,7 @@
 <head>
     @include('layout.header')
     @include('layout.style')
+    @stack('style')
 </head>
 
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
@@ -52,6 +53,7 @@
     <!--begin::Script-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     @include('layout.script')
+    @stack('script')
 
 </body>
 

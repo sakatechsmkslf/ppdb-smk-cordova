@@ -23,9 +23,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register')->name('register');
 });
 
+Route::resource('gelombang', GelombangController::class);
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('gelombang', GelombangController::class);
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
