@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GelombangController;
 use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\PendaftarController;
@@ -33,6 +34,7 @@ Route::prefix('informasi')->name('informasi.')->group(function () {
     Route::get('/print-formulir/{id}', [InformasiController::class, 'printFormulir'])->name('print.formulir');
 });
 
+Route::get('/print-formulir-admin/{id}', [InformasiController::class, 'printFormulir'])->name('print.formulir.admin');
 Route::get('/print-formulir-admin/{id}', [InformasiController::class, 'printFormulir'])->name('print.formulir.admin');
 
 Route::get('provinces', [App\Http\Controllers\DaerahController::class, 'provinces'])->name('provinces');
