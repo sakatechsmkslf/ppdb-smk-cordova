@@ -1,11 +1,3 @@
-{{-- @extends('user.layout')
-
-@section('title', 'Daftar - SPMB SMK Cordova')
-
-@section('main')
-    <h2>Informasi Pendaftaran</h2>
-    <p>Silakan isi data diri untuk mendaftar.</p>
-@endsection --}}
 @extends('user.layout')
 
 @section('title', 'Informasi Pendaftaran - SPMB SMK Cordova')
@@ -54,21 +46,25 @@
         <!-- Result Section -->
         @if (isset($pendaftar))
             <div class="card shadow-sm">
-                <!-- Header Section -->
+                <!-- Header Section with Logo -->
                 <div class="card-header bg-white py-4 border-bottom-0">
-                    <div class="text-center mb-4">
-                        <img src="{{ asset('assets/img/logo-sekolah.png') }}" alt="Logo" class="mb-3"
-                            style="height: 80px;" onerror="this.style.display='none'">
-                        <h4 class="fw-bold mb-1">KOMITE SISTEM PENERIMAAN MURID BARU</h4>
-                        <h5 class="fw-bold text-primary mb-2">SMK CORDOVA MARGOYOSO</h5>
-                        <p class="text-muted small mb-0">Alamat: Kajen Margoyoso Pati Jawa Tengah Kode Pos 59154 Telp/Fax
-                            (0295) 4150037 – 4150010</p>
+                    <div class="text-center mb-4 position-relative">
+                        <!-- Logo positioned on the left -->
+                        <div class="logo-position">
+                            <img src="{{ asset('template/assets/img/logo.png') }}" alt="Logo SMK Cordova" class="school-logo">
+                        </div>
+
+                        <!-- Header Text -->
+                        <div class="header-content">
+                            <h5 class="fw-bold mb-1">KOMITE SISTEM PENERIMAAN MURID BARU</h5>
+                            <h6 class="fw-bold text-primary mb-2">SMK CORDOVA MARGOYOSO</h6>
+                            <p class="text-muted small mb-0">Alamat: Kajen Margoyoso Pati Jawa Tengah Kode Pos 59154<br>Telp/Fax (0295) 4150037 – 4150010</p>
+                        </div>
                     </div>
                     <hr>
                     <div class="text-center">
                         <h5 class="fw-bold text-decoration-underline mb-2">BUKTI PENDAFTARAN SPMB</h5>
-                        <p class="mb-0">TAHUN PELAJARAN {{ $pendaftar->gelombang->tapel }} -
-                            {{ $pendaftar->gelombang->judul }}</p>
+                        <p class="mb-0">TAHUN PELAJARAN {{ $pendaftar->gelombang->tapel }} - {{ $pendaftar->gelombang->judul }}</p>
                     </div>
                 </div>
 
@@ -134,8 +130,7 @@
                                         @elseif($pendaftar->status == 'ditolak')
                                             <span class="badge bg-danger fs-6 px-3 py-2">PENDAFTARAN DITOLAK</span>
                                         @else
-                                            <span class="badge bg-warning text-dark fs-6 px-3 py-2">PENDAFTARAN TELAH
-                                                DIPROSES</span>
+                                            <span class="badge bg-warning text-dark fs-6 px-3 py-2">PENDAFTARAN TELAH DIPROSES</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -288,6 +283,43 @@
 
     <!-- Print Styles -->
     <style>
+        /* Logo Positioning */
+        .logo-position {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .school-logo {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-content {
+            padding-left: 0;
+        }
+
+        /* Responsive Logo */
+        @media (max-width: 768px) {
+            .logo-position {
+                position: static;
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+
+            .school-logo {
+                height: 60px;
+            }
+
+            .header-content {
+                padding-left: 0;
+            }
+        }
+
         @media print {
             body * {
                 visibility: hidden;
@@ -316,6 +348,19 @@
 
             .card-header {
                 background-color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* Ensure logo prints correctly */
+            .logo-position {
+                position: absolute;
+                left: 20px;
+                top: 10px;
+            }
+
+            .school-logo {
+                height: 75px;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }

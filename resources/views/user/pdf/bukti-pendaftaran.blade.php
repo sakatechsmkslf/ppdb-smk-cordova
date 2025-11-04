@@ -25,14 +25,14 @@
             margin: 0 auto;
         }
 
-        /* Header sama seperti formulir */
+        /* Header diperbaiki */
         .header {
             display: flex;
-            gap: 8px;
-            align-items: flex-start;
-            margin-bottom: 0;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 8px;
             border-bottom: 2.5px solid #000;
-            padding-bottom: 1px;
+            padding-bottom: 8px;
         }
 
         .logo {
@@ -40,11 +40,8 @@
             height: 2.5cm;
             flex-shrink: 0;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
-            overflow: visible;
-            padding-bottom: 0;
-            margin-bottom: -2px;
         }
 
         .logo img {
@@ -56,12 +53,11 @@
         .school-info {
             flex: 1;
             text-align: center;
-            padding-top: 4px;
         }
 
         .school-info h1 {
             font-size: 13pt;
-            margin-bottom: 0;
+            margin-bottom: 1px;
             letter-spacing: 0.3px;
             line-height: 1.15;
             font-weight: 700;
@@ -69,15 +65,15 @@
 
         .school-info h2 {
             font-size: 13pt;
-            margin-bottom: 0;
-            margin-top: 1px;
+            margin-bottom: 3px;
+            margin-top: 0;
             font-weight: 700;
             line-height: 1.15;
         }
 
         .school-info p {
             font-size: 8pt;
-            margin-top: 2px;
+            margin-top: 0;
             line-height: 1.2;
             font-style: italic;
         }
