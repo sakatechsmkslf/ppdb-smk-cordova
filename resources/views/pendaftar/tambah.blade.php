@@ -35,7 +35,7 @@
                         {{-- Pilihan Jurusan --}}
                         <h5 class="border-bottom pb-2 mb-3 text-primary">Pilihan Jurusan</h5>
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-8 mb-3">
                                 <label class="form-label fw-bold">Jurusan <span class="text-danger">*</span></label>
                                 <select name="jurusan" id="jurusan" class="form-select sel2" data-placeholder="Pilih Jurusan" required>
                                     <option value=""></option>
@@ -46,6 +46,17 @@
                                     <option value="Teknik Ketenagalistrikan" {{ old('jurusan') == 'Teknik Ketenagalistrikan' ? 'selected' : '' }}>Teknik Ketenagalistrikan</option>
                                 </select>
                                 @error('jurusan')
+                                    <div class="text-danger small">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Status Pendaftaran</label>
+                                <select name="status" id="status" class="form-select sel2" data-placeholder="Pilih Status">
+                                    <option value="diproses" {{ old('status') == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                                    <option value="diterima" {{ old('status') == 'diterima' ? 'selected' : '' }}>Diterima</option>
+                                    <option value="ditolak" {{ old('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                </select>
+                                @error('status')
                                     <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -478,6 +489,21 @@
                 return $(this).data('placeholder') || 'Pilih';
             }
         });
+
+        // Tambahkan styling untuk status dropdown
+        $('#status').on('change', function() {
+            var status = $(this).val();
+            if (status === 'diterima') {
+                $(this).removeClass('bg-warning bg-danger').addClass('bg-success text-white');
+            } else if (status === 'diproses') {
+                $(this).removeClass('bg-success bg-danger').addClass('bg-warning text-white');
+            } else if (status === 'ditolak') {
+                $(this).removeClass('bg-success bg-warning').addClass('bg-danger text-white');
+            }
+        });
+
+        // Trigger change untuk set status awal
+        $('#status').trigger('change');
     });
 
     // AJAX untuk dropdown daerah bertingkat
