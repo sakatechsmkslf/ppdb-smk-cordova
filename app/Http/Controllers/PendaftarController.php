@@ -307,8 +307,8 @@ class PendaftarController extends Controller
     public function edit(string $id)
     {
         $asalSekolah = AsalSekolah::all();
-        $pendaftar = Pendaftar::with('gelombang')->find($id);
-        return view('user.index', compact('provinsi', 'asalSekolah'));
+        $pendaftaran = Pendaftar::with('gelombang')->find($id);
+        return view('pendaftar.edit', compact('pendaftaran', 'asalSekolah'));
     }
 
     /**
@@ -352,7 +352,7 @@ class PendaftarController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return redirect()->route('pendaftar.create')->withErrors($validate)->withInput();
+            return redirect()->route('pendaftar.edit')->withErrors($validate)->withInput();
         }
 
         $gelombangAktif = Gelombang::where('is_active', 'ya')->first();

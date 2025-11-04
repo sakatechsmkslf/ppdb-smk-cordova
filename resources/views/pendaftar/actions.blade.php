@@ -1,6 +1,6 @@
 <div class="d-flex gap-1">
     <div class="btn-group" role="group" aria-label="Actions">
-        <a href="{{ route('gelombang.edit', $row->id) }}" class="btn btn-sm btn-warning" title="Edit">
+        <a href="{{ route('pendaftaran.edit', $row->id) }}" class="btn btn-sm btn-warning" title="Edit">
             <i class="bi bi-pencil"></i>
         </a>
 
