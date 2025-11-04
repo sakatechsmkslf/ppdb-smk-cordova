@@ -28,7 +28,7 @@
                         <div class="card-header">
                             <h3 class="card-title">Daftar Pendaftar</h3>
                             <div class="card-tools">
-                                <a href="{{ route('gelombang.create') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('pendaftaran.create') }}" class="btn btn-primary btn-sm">
                                     <i class="bi bi-plus-circle"></i> Tambah Data
                                 </a>
                             </div>
