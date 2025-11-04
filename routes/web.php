@@ -47,14 +47,10 @@ Route::get('villages', [App\Http\Controllers\DaerahController::class, 'villages'
 Route::middleware(['auth'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::resource('gelombang', GelombangController::class);
     Route::resource('pendaftaran', PendaftarController::class);
-
-
 
 });
 

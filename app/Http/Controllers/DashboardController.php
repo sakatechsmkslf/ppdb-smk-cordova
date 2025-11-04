@@ -20,6 +20,9 @@ class DashboardController extends Controller
             ->groupBy('asalsekolah')
             ->get();
 
-        return view('dashboard', compact('totalPendaftar', 'pendaftaranDitolak', 'pendaftaranDiproses', 'pendaftaranDiterima'));
+            // dd  ($statistik);
+
+
+        return view('dashboard.index', compact('totalPendaftar', 'pendaftarDitolak', 'pendaftarDiproses', 'pendaftarDiterima'));
     }
 }
