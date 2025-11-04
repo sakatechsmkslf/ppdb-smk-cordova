@@ -1,4 +1,5 @@
-@extends('layouts.app')
+@extends('layout.main')
+@section('title', 'Detail Pendaftar')
 
 @section('main')
     <!--begin::Row-->
@@ -51,7 +52,7 @@
                     <div class="row">
                         {{-- Foto Profil --}}
                         <div class="col-md-3 text-center mb-4">
-                            <img src="{{ asset('storage/' . $pendaftar->foto) }}"
+                            <img src="{{ asset('foto/' . $pendaftar->foto) }}"
                                  alt="Foto {{ $pendaftar->nama_lengkap }}"
                                  class="img-fluid rounded shadow"
                                  style="max-width: 250px;">
@@ -303,9 +304,6 @@
                         <div class="card-body text-center">
                             <a href="{{ route('pendaftaran.edit', $pendaftar->id) }}" class="btn btn-warning">
                                 <i class="bi bi-pencil"></i> Edit Data
-                            </a>
-                            <a href="{{ route('pendaftaran.print', $pendaftar->id) }}" target="_blank" class="btn btn-success">
-                                <i class="bi bi-printer"></i> Cetak
                             </a>
                             <form action="{{ route('pendaftaran.destroy', $pendaftar->id) }}" method="POST" class="d-inline">
                                 @csrf

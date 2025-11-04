@@ -110,6 +110,12 @@ class PendaftarController extends Controller
     {
         $provinsi = \Indonesia::allProvinces();
         $asalSekolah = AsalSekolah::all();
+        return view('pendaftar.tambah', compact('provinsi', 'asalSekolah'));
+    }
+    public function createUser()
+    {
+        $provinsi = \Indonesia::allProvinces();
+        $asalSekolah = AsalSekolah::all();
         return view('user.index', compact('provinsi', 'asalSekolah'));
     }
 
@@ -295,7 +301,8 @@ class PendaftarController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $pendaftar = Pendaftar::with('gelombang')->findOrFail($id);
+        return view('pendaftar.detail', compact('pendaftar'));
     }
 
     /**

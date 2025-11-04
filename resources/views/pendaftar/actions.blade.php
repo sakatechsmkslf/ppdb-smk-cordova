@@ -4,7 +4,7 @@
             <i class="bi bi-pencil"></i>
         </a>
 
-        <a href="{{ route('gelombang.show', $row->id) }}" class="btn btn-sm btn-info" title="Detail">
+        <a href="{{ route('pendaftaran.show', $row->id) }}" class="btn btn-sm btn-info" title="Detail">
             <i class="bi bi-eye-fill"></i>
         </a>
 
