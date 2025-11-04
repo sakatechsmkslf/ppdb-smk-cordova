@@ -2,13 +2,15 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 {{-- 2. POPPER.JS --}}
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" crossorigin="anonymous">
+</script>
 
 {{-- 3. BOOTSTRAP --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 
 {{-- 4. OVERLAY SCROLLBARS --}}
-<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
+    crossorigin="anonymous"></script>
 
 {{-- 5. ADMINLTE (hanya 1x, hapus yang duplikat) --}}
 <script src="{{ asset('template/js/adminlte.js') }}"></script>
@@ -31,7 +33,8 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-        if (sidebarWrapper && typeof OverlayScrollbarsGlobal !== 'undefined' && OverlayScrollbarsGlobal.OverlayScrollbars) {
+        if (sidebarWrapper && typeof OverlayScrollbarsGlobal !== 'undefined' && OverlayScrollbarsGlobal
+            .OverlayScrollbars) {
             OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
                 scrollbars: {
                     theme: Default.scrollbarTheme,
@@ -79,3 +82,55 @@
         }
     });
 </script>
+<!-- ... konten layout Anda ... -->
+
+<!-- Tempatkan skrip notifikasi di sini -->
+@if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000, // Notifikasi akan hilang setelah 3 detik
+                toast: true,
+                position: 'top-end'
+            });
+        });
+    </script>
+@endif
+
+@if (session('error'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: '{{ session('error') }}',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#dc3545'
+            });
+        });
+    </script>
+@endif
+
+@if ($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var errorMessages = '';
+            @foreach ($errors->all() as $error)
+                errorMessages += '{{ $error }}\n';
+            @endforeach
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Terjadi Kesalahan!',
+                text: errorMessages.trim(),
+                confirmButtonText: 'Perbaiki',
+                confirmButtonColor: '#ffc107'
+            });
+        });
+    </script>
+@endif
+
