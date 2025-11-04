@@ -242,18 +242,8 @@
 
                     <div class="col-md-3 mb-4">
                         <label class="mb-2 small fw-bold required">Kabupaten</label>
-                        {{-- @php
-                            $provinces = new App\Http\Controllers\DaerahController();
-                            $cities = $provinces->cities_all();
-                        @endphp --}}
-
                         <select name="kabupaten" id="kabupaten" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Kabupaten</option>
-                            {{-- @foreach ($cities as $city)
-                                <option value="{{ $city->id }}"
-                                    {{ old('kabupaten') == $city->id ? 'selected' : '' }}>
-                                    {{ $city->name }}</option>
-                            @endforeach --}}
                         </select>
                         @error('kabupaten')
                             <div class="text-danger small">{{ $message }}</div>
@@ -262,17 +252,8 @@
 
                     <div class="col-md-3 mb-4">
                         <label class="mb-2 small fw-bold required">Kecamatan</label>
-                        {{-- @php
-                            $provinces = new App\Http\Controllers\DaerahController();
-                            $districts = $provinces->districts_all();
-                        @endphp --}}
                         <select name="kecamatan" id="kecamatan" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Kecamatan</option>
-                            {{-- @foreach ($districts as $district)
-                                <option value="{{ $district->id }}"
-                                    {{ old('kecamatan') == $district->id ? 'selected' : '' }}>
-                                    {{ $district->name }}</option>
-                            @endforeach --}}
                         </select>
                         @error('kecamatan')
                             <div class="text-danger small">{{ $message }}</div>
@@ -281,17 +262,8 @@
 
                     <div class="col-md-3 mb-4">
                         <label class="mb-2 small fw-bold required">Desa/Kelurahan</label>
-                        {{-- @php
-                            $provinces = new App\Http\Controllers\DaerahController();
-                            $villages = $provinces->villages_all();
-                        @endphp --}}
                         <select name="desa" id="desa" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Desa</option>
-                            {{-- @foreach ($villages as $village)
-                                <option value="{{ $village->id ?? ''}}" {{ old('desa') == $village->id ? 'selected' : '' }}>
-                                    {{ $village->name }}</option>
-                            @endforeach --}}
-
                         </select>
                         @error('desa')
                             <div class="text-danger small">{{ $message }}</div>
