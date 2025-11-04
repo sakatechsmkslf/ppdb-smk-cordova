@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gelombang;
 use App\Models\Pendaftar;
 use Illuminate\Http\Request;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -131,6 +132,9 @@ class PendaftarController extends Controller
             return redirect()->route('pendaftar.create')->withErrors($validate)->withInput();
         }
 
+        $gelombangAktif = Gelombang::where('is_active', 'ya')->first();
+
+        // === Generate nomor pendaftaran otomatis ===
         // === Generate nomor pendaftaran otomatis ===
         $today = Carbon::now()->format('Ymd'); // contoh: 20251104
         $prefix = 'PMB' . $today; // contoh: PMB20251104
@@ -147,6 +151,7 @@ class PendaftarController extends Controller
             $lastNumber = 1;
         }
 
+        // format jadi 4 digit (0001, 0002, dst)
         // format jadi 4 digit (0001, 0002, dst)
         $nomorPendaftaran = $prefix . str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
 
@@ -165,16 +170,17 @@ class PendaftarController extends Controller
         $imageKK->encode(new AutoEncoder(50))->save(public_path('kk/' . $imageNameKK));
 
         //read image
-        $imageNameKtp = time() . '.' . $request->ktp->extension();
-        $imageKtp = $manager->read($request->file('ktp'));
+        $imageNameKtp = time() . '.' . $request->ktp_ortu->extension();
+        $imageKtp = $manager->read($request->file('ktp_ortu'));
         $imageKtp->encode(new AutoEncoder(50))->save(public_path('ktp/' . $imageNameKtp));
 
         //read image
-        $imageNameAkta = time() . '.' . $request->akta->extension();
-        $imageAkta = $manager->read($request->file('akta'));
+        $imageNameAkta = time() . '.' . $request->aktalahir->extension();
+        $imageAkta = $manager->read($request->file('aktalahir'));
         $imageAkta->encode(new AutoEncoder(50))->save(public_path('akta/' . $imageNameAkta));
 
         $pendaftar = Pendaftar::create([
+            "gelombang_id" => $gelombangAktif->id,
             "nomor_pendaftaran" => $nomorPendaftaran,
             "jurusan" => $request->jurusan,
             "nama_lengkap" => $request->nama_lengkap,
@@ -184,7 +190,7 @@ class PendaftarController extends Controller
             "gol_darah" => $request->gol_darah,
             "nik" => $request->nik,
             "tempat_lahir" => $request->tempat_lahir,
-            "tanggal_lahir" => $request->tangal_lahir,
+            "tanggal_lahir" => $request->tanggal_lahir,
             "provinsi" => $request->provinsi,
             "kabupaten" => $request->kabupaten,
             "kecamatan" => $request->kecamatan,

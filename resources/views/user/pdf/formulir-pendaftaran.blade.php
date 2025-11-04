@@ -14,7 +14,7 @@
             font-size: 11pt;
             color: #111;
             background: #fff;
-            padding: 1.2cm; /* leave margin for printing */
+            padding: 0.3cm 1.2cm;
             line-height: 1.35;
         }
 
@@ -29,14 +29,14 @@
             display: flex;
             gap: 12px;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 3px;
             border-bottom: 2px solid #000;
-            padding-bottom: 8px;
+            padding-bottom: 3px;
         }
 
         .logo {
-            width: 3.6cm;
-            height: 3.6cm;
+            width: 2.2cm;
+            height: 2.2cm;
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -52,31 +52,31 @@
 
         .school-info {
             flex: 1;
-            text-align: left;
+            text-align: center;
         }
 
         .school-info h1 {
             font-size: 14pt;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
             letter-spacing: 0.5px;
         }
 
         .school-info h2 {
             font-size: 12pt;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
             font-weight: 700;
         }
 
         .school-info p {
             font-size: 9pt;
-            margin-top: 3px;
+            margin-top: 2px;
         }
 
         /* Title box */
         .title-box {
             text-align: center;
-            margin: 12px 0 14px;
-            padding: 8px;
+            margin: 4px 0 8px;
+            padding: 5px;
             border: 1px solid #d0d0d0;
             background: #fafafa;
         }
@@ -84,18 +84,18 @@
         .title-box h3 {
             font-size: 13pt;
             font-weight: 700;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
-        .title-box p { font-size: 11pt; margin-top: 2px; }
+        .title-box p { font-size: 11pt; margin-top: 1px; }
 
         /* Generic section title */
         .section-title {
             background: #efefef;
             padding: 6px 10px;
             font-weight: 700;
-            margin-top: 10px;
-            margin-bottom: 6px;
+            margin-top: 8px;
+            margin-bottom: 5px;
             border-left: 5px solid #000;
             font-size: 10.5pt;
         }
@@ -104,11 +104,11 @@
         table.form-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         table.form-table td {
-            padding: 5px 6px;
+            padding: 4px 6px;
             vertical-align: top;
             font-size: 10.5pt;
         }
@@ -125,10 +125,11 @@
         /* Note + Photo + Signature container */
         .note-box {
             border: 1.2px solid #000;
-            margin-top: 16px;
+            margin-top: 12px;
             padding: 12px;
             display: flex;
-            gap: 14px;
+            gap: 20px;
+            justify-content: space-between;
             align-items: flex-start;
             background: #fff;
         }
@@ -141,6 +142,21 @@
 
         .note-text p { margin-bottom: 6px; }
 
+        /* Signature section on the right */
+        .signature-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .signature-location {
+            font-size: 10pt;
+            text-align: right;
+            white-space: nowrap;
+        }
+
         .photo-in-note {
             width: 3.5cm;
             height: 4.5cm;
@@ -151,7 +167,6 @@
             justify-content: center;
             text-align: center;
             font-size: 10pt;
-            flex-shrink: 0;
         }
 
         .photo-in-note img {
@@ -161,32 +176,18 @@
             display: block;
         }
 
-        /* Signature area inside note */
-        .note-sign {
-            margin-top: 6px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 6px;
-        }
-
-        .signature-location {
-            font-size: 10pt;
-            margin-right: 2px;
-        }
-
         .signature-name {
-            display: inline-block;
-            min-width: 180px;
+            width: 3.5cm;
             border-top: 1px solid #000;
             padding-top: 6px;
             text-align: center;
             font-weight: 700;
+            font-size: 10.5pt;
         }
 
         /* Footer */
         .footer-text {
-            margin-top: 10px;
+            margin-top: 8px;
             text-align: center;
             font-size: 9pt;
             color: #666;
@@ -196,7 +197,7 @@
         .muted { color: #666; font-size: 9.5pt; }
 
         @page {
-            margin: 1.2cm;
+            margin: 0.3cm 1.2cm;
         }
 
         @media print {
@@ -212,8 +213,8 @@
         <div class="header">
             <div class="logo">
                 {{-- Ganti path logo jika perlu --}}
-                @if(file_exists(public_path('images/logo.png')))
-                    <img src="{{ public_path('images/logo.png') }}" alt="Logo Sekolah">
+                @if(file_exists(public_path('template/assets/img/logo.png')))
+                    <img src="{{ public_path('template/assets/img/logo.png') }}" alt="Logo Sekolah">
                 @else
                     {{-- Placeholder logo --}}
                     <div style="font-size:10pt; text-align:center;">LOGO</div>
@@ -427,21 +428,22 @@
                 <p><strong>Note :</strong></p>
                 <p>Formulir ini merupakan hasil isian data saya di Website Portal PPDB Online.</p>
                 <p><strong>Saya bertanggung jawab penuh atas seluruh isian data di formulir ini.</strong></p>
-
-                <div class="note-sign" style="width:100%; margin-top:8px;">
-                    <div class="signature-location">
-                        {{ $pendaftar->desa ?? '-' }}, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
-                    </div>
-                    <div class="signature-name">{{ strtoupper($pendaftar->nama_lengkap ?? '-') }}</div>
-                </div>
             </div>
 
-            <div class="photo-in-note">
-                @if($pendaftar->foto && file_exists(public_path('storage/'.$pendaftar->foto)))
-                    <img src="{{ public_path('storage/'.$pendaftar->foto) }}" alt="Foto Peserta">
-                @else
-                    <div>PAS<br>FOTO<br>4x6</div>
-                @endif
+            <div class="signature-section">
+                <div class="signature-location">
+                    {{ $pendaftar->desa ?? '-' }}, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+                </div>
+
+                <div class="photo-in-note">
+                    @if($pendaftar->foto && file_exists(public_path('storage/'.$pendaftar->foto)))
+                        <img src="{{ public_path('storage/'.$pendaftar->foto) }}" alt="Foto Peserta">
+                    @else
+                        <div>PAS<br>FOTO<br>4x6</div>
+                    @endif
+                </div>
+
+                <div class="signature-name">{{ strtoupper($pendaftar->nama_lengkap ?? '-') }}</div>
             </div>
         </div>
 
