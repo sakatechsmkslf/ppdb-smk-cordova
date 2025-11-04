@@ -83,7 +83,7 @@
                         <h3>Pilihan Gelombang dan Jurusan</h3>
                     </div>
 
-                    {{-- <div class="col-md-6 mb-4">
+                    <div class="col-md-6 mb-4">
                         <label class="mb-2 small fw-bold required">Gelombang</label>
                         <select name="gelombang_id" id="gelombang" class="form-select form-select-sm sel2"
                             data-placeholder="Pilih gelombang" required>
@@ -95,18 +95,17 @@
                         @error('gelombang_id')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
-                    </div> --}}
+                    </div>
 
-                    <div class="col-md-12 mb-4">
+                    <div class="col-md-6 mb-4">
                         <label class="mb-2 small fw-bold required">Jurusan</label>
                         <select name="jurusan" id="jurusan" class="form-select form-select-sm sel2"
                             data-placeholder="Pilih jurusan" required>
                             <option value=""></option>
-                            <option value="Desain Komunikasi Visual">Desain Komunikasi Visual</option>
-                            <option value="Teknologi Farmasi">Teknologi Farmasi</option>
-                            <option value="Teknik Otomotif">Teknik Otomotif</option>
-                            <option value="Teknik Kimia Industri">Teknik Kimia Industri</option>
-                            <option value="Teknik Ketenagalistrikan">Teknik Ketenagalistrikan</option>
+                            <option value="Teknik Komputer dan Jaringan">Teknik Komputer dan Jaringan</option>
+                            <option value="Multimedia">Multimedia</option>
+                            <option value="Akuntansi">Akuntansi</option>
+                            <option value="Administrasi Perkantoran">Administrasi Perkantoran</option>
                         </select>
                         @error('jurusan')
                             <div class="text-danger small">{{ $message }}</div>
@@ -229,12 +228,12 @@
                         @endphp
                         <select name="provinsi" id="provinsi" class="form-select form-select-sm sel2" required>
                             <option value="">Pilih Provinsi</option>
-                            @foreach ($provinces as $item)
-                                <option value=""></option>
-                                <option value="{{ $item->id ?? '' }}"
-                                    @if (old('prov_id') == $item->id) {{ 'selected' }} @endif>
-                                    {{ $item->name ?? '' }}</option>
-                            @endforeach
+                                                @foreach ($provinces as $item)
+                                                    <option value=""></option>
+                                                    <option value="{{ $item->id ?? '' }}"
+                                                        @if (old('prov_id') == $item->id) {{ 'selected' }} @endif>
+                                                        {{ $item->name ?? '' }}</option>
+                                                @endforeach
                         </select>
                         @error('provinsi')
                             <div class="text-danger small">{{ $message }}</div>
@@ -348,8 +347,19 @@
 
                     <div class="col-md-4 mb-4">
                         <label class="mb-2 small fw-bold required">Rekomendasi</label>
-                        <input type="text" name="rekomendasi" value="{{ old('rekomendasi') }}" placeholder="Rekomendasi Dari"
-                            class="form-control form-control-sm rounded-0" required>
+                        <select name="rekomendasi" class="form-select form-select-sm sel2"
+                            data-placeholder="Pilih salah satu" required>
+                            <option value=""></option>
+                            <option value="Orang Tua" {{ old('rekomendasi') == 'Orang Tua' ? 'selected' : '' }}>Orang Tua
+                            </option>
+                            <option value="Sekolah" {{ old('rekomendasi') == 'Sekolah' ? 'selected' : '' }}>Sekolah
+                            </option>
+                            <option value="Teman" {{ old('rekomendasi') == 'Teman' ? 'selected' : '' }}>Teman</option>
+                            <option value="Media Sosial" {{ old('rekomendasi') == 'Media Sosial' ? 'selected' : '' }}>
+                                Media Sosial</option>
+                            <option value="Lainnya" {{ old('rekomendasi') == 'Lainnya' ? 'selected' : '' }}>Lainnya
+                            </option>
+                        </select>
                         @error('rekomendasi')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
@@ -663,13 +673,13 @@
         }
         $(function() {
             $('#provinsi').on('change', function() {
-                onChangeSelect('{{ route('cities') }}', $(this).val(), 'kabupaten');
+                onChangeSelect('{{ route("cities") }}', $(this).val(), 'kabupaten');
             });
             $('#kabupaten').on('change', function() {
-                onChangeSelect('{{ route('districts') }}', $(this).val(), 'kecamatan');
+                onChangeSelect('{{ route("districts") }}', $(this).val(), 'kecamatan');
             })
             $('#kecamatan').on('change', function() {
-                onChangeSelect('{{ route('villages') }}', $(this).val(), 'desa');
+                onChangeSelect('{{ route("villages") }}', $(this).val(), 'desa');
             })
         });
     </script>
