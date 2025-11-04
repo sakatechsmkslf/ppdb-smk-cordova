@@ -38,11 +38,11 @@
                                 </h5>
                             </div>
                             <div class="col-md-6 text-md-end">
-                                <span class="badge
-                                    @if($pendaftar->status == 'diterima') bg-success
+                                <span
+                                    class="badge
+                                    @if ($pendaftar->status == 'diterima') bg-success
                                     @elseif($pendaftar->status == 'ditolak') bg-danger
-                                    @else bg-warning
-                                    @endif fs-6">
+                                    @else bg-warning @endif fs-6">
                                     {{ strtoupper($pendaftar->status) }}
                                 </span>
                             </div>
@@ -52,10 +52,8 @@
                     <div class="row">
                         {{-- Foto Profil --}}
                         <div class="col-md-3 text-center mb-4">
-                            <img src="{{ asset('foto/' . $pendaftar->foto) }}"
-                                 alt="Foto {{ $pendaftar->nama_lengkap }}"
-                                 class="img-fluid rounded shadow"
-                                 style="max-width: 250px;">
+                            <img src="{{ asset('foto/' . $pendaftar->foto) }}" alt="Foto {{ $pendaftar->nama_lengkap }}"
+                                class="img-fluid rounded shadow" style="max-width: 250px;">
                         </div>
 
                         {{-- Data Pribadi --}}
@@ -84,7 +82,8 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <strong>Tempat, Tanggal Lahir:</strong><br>
-                                            {{ $pendaftar->tempat_lahir }}, {{ date('d-m-Y', strtotime($pendaftar->tanggal_lahir)) }}
+                                            {{ $pendaftar->tempat_lahir }},
+                                            {{ date('d-m-Y', strtotime($pendaftar->tanggal_lahir)) }}
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <strong>Golongan Darah:</strong><br>
@@ -93,7 +92,7 @@
                                         <div class="col-md-6 mb-3">
                                             <strong>No. HP:</strong><br>
                                             <a href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $pendaftar->no_hp)) }}"
-                                               target="_blank" class="text-decoration-none">
+                                                target="_blank" class="text-decoration-none">
                                                 <i class="bi bi-whatsapp text-success"></i> {{ $pendaftar->no_hp }}
                                             </a>
                                         </div>
@@ -128,19 +127,29 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <strong>Desa:</strong><br>
-                                    {{ $pendaftar->desa }}
+                                    {{-- {{ $pendaftar->desa }} --}}
+                                    {{-- {{ DB::table('indonesia_villages')->where('id', $pendaftar->desa)->first() }} --}}
+                                    @foreach (DB::table('indonesia_villages')->where('id', $pendaftar->desa)->get() as $item)
+                                        {{ $item->name ?? '' }}
+                                    @endforeach
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <strong>Kecamatan:</strong><br>
-                                    {{ $pendaftar->kecamatan }}
+                                    @foreach (DB::table('indonesia_districts')->where('id', $pendaftar->kecamatan)->get() as $item)
+                                        {{ $item->name ?? '' }}
+                                    @endforeach
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <strong>Kabupaten:</strong><br>
-                                    {{ $pendaftar->kabupaten }}
+                                    @foreach (DB::table('indonesia_cities')->where('id', $pendaftar->kabupaten)->get() as $item)
+                                        {{ $item->name ?? '' }}
+                                    @endforeach
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <strong>Provinsi:</strong><br>
-                                    {{ $pendaftar->provinsi }}
+                                    @foreach (DB::table('indonesia_provinces')->where('id', $pendaftar->provinsi)->get() as $item)
+                                        {{ $item->name ?? '' }}
+                                    @endforeach
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <strong>Kode Pos:</strong><br>
@@ -249,26 +258,30 @@
                             <div class="row">
                                 <div class="col-md-3 mb-3">
                                     <strong>Kartu Keluarga:</strong><br>
-                                    <a href="{{ asset('kk/' . $pendaftar->kk) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ asset('kk/' . $pendaftar->kk) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <strong>KTP Orang Tua:</strong><br>
-                                    <a href="{{ asset('ktp/' . $pendaftar->ktp_ortu) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ asset('ktp/' . $pendaftar->ktp_ortu) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <strong>Akta Lahir:</strong><br>
-                                    <a href="{{ asset('akta/' . $pendaftar->aktalahir) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <a href="{{ asset('akta/' . $pendaftar->aktalahir) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-eye"></i> Lihat
                                     </a>
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <strong>KIP:</strong><br>
-                                    @if($pendaftar->kip)
-                                        <a href="{{ asset('kip/' . $pendaftar->kip) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    @if ($pendaftar->kip)
+                                        <a href="{{ asset('kip/' . $pendaftar->kip) }}" target="_blank"
+                                            class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-eye"></i> Lihat
                                         </a>
                                     @else
@@ -277,8 +290,9 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <strong>PKH:</strong><br>
-                                    @if($pendaftar->pkh)
-                                        <a href="{{ asset('pkh/' . $pendaftar->pkh) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    @if ($pendaftar->pkh)
+                                        <a href="{{ asset('pkh/' . $pendaftar->pkh) }}" target="_blank"
+                                            class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-eye"></i> Lihat
                                         </a>
                                     @else
@@ -287,8 +301,9 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <strong>KKS:</strong><br>
-                                    @if($pendaftar->kks)
-                                        <a href="{{ asset('kks/' . $pendaftar->kks) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    @if ($pendaftar->kks)
+                                        <a href="{{ asset('kks/' . $pendaftar->kks) }}" target="_blank"
+                                            class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-eye"></i> Lihat
                                         </a>
                                     @else
@@ -305,7 +320,8 @@
                             <a href="{{ route('pendaftaran.edit', $pendaftar->id) }}" class="btn btn-warning">
                                 <i class="bi bi-pencil"></i> Edit Data
                             </a>
-                            <form action="{{ route('pendaftaran.destroy', $pendaftar->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('pendaftaran.destroy', $pendaftar->id) }}" method="POST"
+                                class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-delete">
@@ -322,26 +338,26 @@
 @endsection
 
 @push('script')
-<script>
-    // Konfirmasi Delete
-    document.querySelector('.btn-delete')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        const form = this.closest('form');
+    <script>
+        // Konfirmasi Delete
+        document.querySelector('.btn-delete')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
 
-        Swal.fire({
-            title: 'Hapus Data Pendaftar?',
-            text: 'Data yang dihapus tidak dapat dikembalikan!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
+            Swal.fire({
+                title: 'Hapus Data Pendaftar?',
+                text: 'Data yang dihapus tidak dapat dikembalikan!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
         });
-    });
-</script>
+    </script>
 @endpush
