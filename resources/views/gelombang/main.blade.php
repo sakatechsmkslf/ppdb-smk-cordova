@@ -56,34 +56,51 @@
 
     @push('script')
         <script>
-           $(document).ready(function() {
-    let table = $('#gelombang-table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: "{{ route('gelombang.index') }}",
-            dataSrc: function(json) {
-                return json.data; // pastikan datanya tetap dikembalikan ke datatable
-            }
-        },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'tapel', name: 'tapel' },
-            { data: 'judul', name: 'judul' },
-            { data: 'is_active', name: 'is_active' },
-            { data: 'action', name: 'action', orderable: false, searchable: false }
-        ]
-    });
+            $(document).ready(function() {
+                let table = $('#gelombang-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: "{{ route('gelombang.index') }}",
+                        dataSrc: function(json) {
+                            return json.data; // pastikan datanya tetap dikembalikan ke datatable
+                        }
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'tapel',
+                            name: 'tapel'
+                        },
+                        {
+                            data: 'judul',
+                            name: 'judul'
+                        },
+                        {
+                            data: 'is_active',
+                            name: 'is_active'
+                        },
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false
+                        }
+                    ]
+                });
 
-    $(document).on('click', '.btn-delete', function(e) {
-        e.preventDefault();
-        let form = $(this).closest('form');
-        if(confirm('Yakin ingin menghapus data ini?')) {
-            form.submit();
-        }
-    });
-});
-
+                $(document).on('click', '.btn-delete', function(e) {
+                    e.preventDefault();
+                    let form = $(this).closest('form');
+                    if (confirm('Yakin ingin menghapus data ini?')) {
+                        form.submit();
+                    }
+                });
+            });
         </script>
     @endpush
 @endsection
