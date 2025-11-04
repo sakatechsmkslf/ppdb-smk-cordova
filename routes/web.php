@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GelombangController;
 use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\PendaftarController;
@@ -48,9 +49,7 @@ Route::middleware(['auth'])->group(function () {
     // IKI AUTH
     Route::resource('gelombang', GelombangController::class);
     // Public Routes
-    Route::get('dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
