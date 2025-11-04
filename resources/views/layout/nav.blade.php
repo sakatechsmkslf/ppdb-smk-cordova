@@ -4,7 +4,7 @@
             <i class="bi bi-list"></i>
         </a>
     </li>
-    <li class="nav-item d-none d-md-block"><a href="{{ route('home') }}" class="nav-link">Home</a></li>
+    <li class="nav-item d-none d-md-block"><a href="{{ route('dashboard') }}" class="nav-link">Home</a></li>
 </ul>
 
 <ul class="navbar-nav ms-auto">

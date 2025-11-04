@@ -10,16 +10,69 @@ use Intervention\Image\ImageManager;
 use Laravolt\Indonesia;
 use Validator;
 use Carbon\Carbon;
+use Yajra\DataTables\DataTables;
 
 class PendaftarController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pendaftar = Pendaftar::all();
-        return view('pendaftar.main', compact('pendaftar'));
+        // $pendaftar = Pendaftar::all();
+        // return view('pendaftar.main', compact('pendaftar'));
+
+        if ($request->ajax()) {
+            $query = Pendaftar::with('gelombang')->select(
+                'id',
+                'gelombang_id',
+                'nomor_pendaftaran',
+                'jurusan',
+                'nama_lengkap',
+                'no_hp',
+                'jkel',
+                'asalsekolah',
+                'rekomendasi',
+                'status'
+            );
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+
+                // kolom gelombang -> tampilkan judul
+                ->addColumn('gelombang', function ($row) {
+                    return $row->gelombang->judul ?? '-';
+                })
+
+                // kolom no_hp -> link ke WhatsApp
+                ->addColumn('no_hp_link', function ($row) {
+                    $no = preg_replace('/[^0-9]/', '', $row->no_hp);
+                    return '<a href="https://wa.me/' . $no . '" target="_blank" class="d-flex align-items-center">
+                            <i class="bi bi-whatsapp me-1 text-success"></i> ' . $row->no_hp . '
+                        </a>';
+                })
+
+                // kolom keterangan -> dropdown
+                ->addColumn('keterangan_dropdown', function ($row) {
+                    $options = ['diterima' => 'Di Terima', 'diproses' => 'Di Proses', 'ditolak' => 'Di Tolak'];
+                    $html = '<select class="form-select form-select-sm keterangan-select" data-id="' . $row->id . '">';
+                    foreach ($options as $key => $label) {
+                        $selected = $row->keterangan === $key ? 'selected' : '';
+                        $html .= '<option value="' . $key . '" ' . $selected . '>' . $label . '</option>';
+                    }
+                    $html .= '</select>';
+                    return $html;
+                })
+
+                ->addColumn('action', function ($row) {
+                    return view('pendaftaran.actions', compact('row'))->render();
+                })
+
+                ->rawColumns(['no_hp_link', 'keterangan_dropdown', 'action'])
+                ->make(true);
+        }
+
+        return view('pendaftar.main');
     }
 
     /**
@@ -78,7 +131,7 @@ class PendaftarController extends Controller
             return redirect()->route('pendaftar.create')->withErrors($validate)->withInput();
         }
 
-          // === Generate nomor pendaftaran otomatis ===
+        // === Generate nomor pendaftaran otomatis ===
         $today = Carbon::now()->format('Ymd'); // contoh: 20251104
         $prefix = 'PMB' . $today; // contoh: PMB20251104
 
@@ -94,7 +147,7 @@ class PendaftarController extends Controller
             $lastNumber = 1;
         }
 
-          // format jadi 4 digit (0001, 0002, dst)
+        // format jadi 4 digit (0001, 0002, dst)
         $nomorPendaftaran = $prefix . str_pad($lastNumber, 4, '0', STR_PAD_LEFT);
 
         //img interevention

@@ -18,13 +18,13 @@
          <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="navigation"
              aria-label="Main navigation" data-accordion="false" id="navigation">
              <li class="nav-item">
-                 <a href="./generate/theme.html" class="nav-link">
+                 <a href="{{ route('dashboard') }}" class="nav-link">
                      <i class="nav-icon bi bi-house-gear"></i>
                      <p>Dashboard</p>
                  </a>
              </li>
              <li class="nav-item">
-                 <a href="./generate/theme.html" class="nav-link">
+                 <a href="{{ route("pendaftaran.index") }}" class="nav-link">
                      <i class="nav-icon bi bi-people-fill"></i>
                      <p>Pendaftar</p>
                  </a>

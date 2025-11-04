@@ -8,16 +8,16 @@ use App\Models\Gelombang;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
-Route::get('/', function () {
+Route::get('dashboard', function () {
     return view('dashboard.index');
-})->name('home');
+})->name('dashboard');
 
 Route::get('/daftar', function () {
     return view('user.index');
 })->name('daftar');
 
 
-// Auth Routes
+// IKI AUTH
 Route::resource('gelombang', GelombangController::class);
 Route::controller(AuthController::class)->group(function () {
     Route::get('viewLogin', 'viewLogin')->name('viewLogin');
