@@ -8,9 +8,9 @@
             <i class="bi bi-eye-fill"></i>
         </a>
 
-        <a href="{{ route('print.formulir',$row->id) }}" target="_blank" class="btn btn-sm btn-success" title="Print">
+        {{-- <a href="{{ route('print.formulir',$row->id) }}" target="_blank" class="btn btn-sm btn-success" title="Print">
             <i class="bi bi-printer"></i>
-        </a>
+        </a> --}}
     </div>
 
     <form action="{{ route('pendaftaran.destroy', parameters: $row->id) }}" method="POST" class="d-inline">

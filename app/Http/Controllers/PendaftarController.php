@@ -151,7 +151,7 @@ class PendaftarController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return redirect()->route('createUser')->withErrors($validate)->withInput()->with('error','cek yang kamu isi');
+            return redirect()->route('viewUser')->withErrors($validate)->withInput();
         }
 
         $gelombangAktif = Gelombang::where('is_active', 'ya')->first();
@@ -338,7 +338,7 @@ class PendaftarController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return redirect()->route('daftar')->withErrors($validate)->withInput();
+            return redirect()->route('pendaftaran.create')->withErrors($validate)->withInput()->with('error','ada eror');
         }
 
         $gelombangAktif = Gelombang::where('is_active', 'ya')->first();
@@ -468,7 +468,7 @@ class PendaftarController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('anda berhasil mendaftar');
+        return redirect()->route('pendaftaran.index')->with('success','anda berhasil mendaftar');
     }
 
     /**
