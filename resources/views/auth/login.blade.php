@@ -38,13 +38,15 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Masuk untuk memulai sesi Anda</p>
-                <form action="index.html" method="post">
+                <form action="{{ route('doLogin') }}" method="post">
+                    @csrf
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username" />
+                        <input name="name" type="text" class="form-control" placeholder="Username" />
                         <div class="input-group-text"><span class="bi bi-person-fill"></span></div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" id="password" class="form-control" placeholder="Password" />
+                        <input type="password" name="password" id="password" class="form-control"
+                            placeholder="Password" />
                         <div class="input-group-text">
                             <span class="bi bi-eye-slash-fill" id="togglePassword" style="cursor: pointer;"></span>
                         </div>

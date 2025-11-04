@@ -17,22 +17,15 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credential = [
-            "name" => $request->username,
+            "name" => $request->name,
             "password" => $request->password
         ];
 
         if (auth()->attempt($credential)) {
-            $user = User::where('name', $request->username)->first();
-
+            $user = User::where('name', $request->name)->first();
             //* login untuk admin
-            if ($user->hasRole('admin')) {
-                return redirect()->route('adminYysDashboard');
-            }
+            return redirect()->route('dashboard');
 
-            //* login untuk pendaftar
-            else if ($user->hasRole('pendaftar')) {
-                return redirect()->route('operatorDashboard');
-            }
 
         } else {
             return redirect()->back()->with('error', 'Username atau Password anda salah');
