@@ -17,12 +17,12 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credential = [
-            "email" => $request->email,
+            "name" => $request->username,
             "password" => $request->password
         ];
 
         if (auth()->attempt($credential)) {
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('name', $request->username)->first();
 
             //* login untuk admin
             if ($user->hasRole('admin')) {

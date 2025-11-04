@@ -21,6 +21,10 @@ class PendaftarController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
+        if (!$user) {
+            return redirect()->back()->with('error', 'anda tidak punya permission');
+        }
         // $pendaftar = Pendaftar::all();
         // return view('pendaftar.main', compact('pendaftar'));
 

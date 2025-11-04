@@ -27,14 +27,14 @@ class RolePermissionSeeder extends Seeder
         $admin->syncPermissions($permission);
         $user->givePermissionTo(['mendaftar']);
 
-        $userAdmin = User::factory()->make([
+        $userAdmin = User::create([
             "name" => 'pak_admin',
             'email' => 'admin@gmail.com',
             'password' => '123',
         ]);
         $userAdmin->assignRole('admin');
 
-        $userPendaftar = User::factory()->make([
+        $userPendaftar = User::create([
             "name" => 'pak pendaftar',
             'email' => 'pendaftar@gmail.com',
             'password' => '123',
