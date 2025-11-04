@@ -7,24 +7,16 @@ use App\Http\Controllers\PendaftarController;
 use App\Models\Gelombang;
 use Illuminate\Support\Facades\Route;
 
-// Public Routes
-Route::get('dashboard', function () {
-    return view('dashboard.index');
-})->name('dashboard');
+
 
 Route::get('/daftar', function () {
     return view('user.index');
 })->name('daftar');
 
+Route::get('/', [AuthController::class, 'viewLogin'])->name('login');
+Route::post('doLogin', [AuthController::class, 'login'])->name('doLogin');
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-// IKI AUTH
-Route::resource('gelombang', GelombangController::class);
-Route::controller(AuthController::class)->group(function () {
-    Route::get('viewLogin', 'viewLogin')->name('viewLogin');
-    Route::post('login', 'login')->name('login');
-    Route::get('viewRegister', 'viewRegister')->name('viewRegister');
-    Route::post('register', 'register')->name('register');
-});
 
 // Informasi Routes (Public)
 Route::prefix('informasi')->name('informasi.')->group(function () {
@@ -53,6 +45,13 @@ Route::resource('pendaftaran', PendaftarController::class);
 
 // Protected Routes (Auth Required)
 Route::middleware(['auth'])->group(function () {
+    // IKI AUTH
+    Route::resource('gelombang', GelombangController::class);
+    // Public Routes
+    Route::get('dashboard', function () {
+        return view('dashboard.index');
+    })->name('dashboard');
+
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
