@@ -48,25 +48,47 @@ class PendaftarController extends Controller
                 // kolom no_hp -> link ke WhatsApp
                 ->addColumn('no_hp_link', function ($row) {
                     $no = preg_replace('/[^0-9]/', '', $row->no_hp);
+
+                    // Ganti 0 di awal dengan 62
+                    if (substr($no, 0, 1) === '0') {
+                        $no = '62' . substr($no, 1);
+                    }
+
                     return '<a href="https://wa.me/' . $no . '" target="_blank" class="d-flex align-items-center">
-                            <i class="bi bi-whatsapp me-1 text-success"></i> ' . $row->no_hp . '
-                        </a>';
+            <i class="bi bi-whatsapp me-1 text-success"></i> ' . $row->no_hp . '
+        </a>';
                 })
 
                 // kolom keterangan -> dropdown
                 ->addColumn('keterangan_dropdown', function ($row) {
-                    $options = ['diterima' => 'Di Terima', 'diproses' => 'Di Proses', 'ditolak' => 'Di Tolak'];
+                    // 1. Definisi opsi dropdown
+                    $options = [
+                        'diterima' => 'Di Terima',  // value => label
+                        'diproses' => 'Di Proses',
+                        'ditolak' => 'Di Tolak'
+                    ];
+
+                    // 2. Buat tag <select> dengan class dan data-id
                     $html = '<select class="form-select form-select-sm keterangan-select" data-id="' . $row->id . '">';
+
+                    // 3. Loop setiap opsi untuk membuat <option>
                     foreach ($options as $key => $label) {
+                        // 4. Cek apakah value ini sama dengan data di database
                         $selected = $row->keterangan === $key ? 'selected' : '';
+
+                        // 5. Buat tag <option>
                         $html .= '<option value="' . $key . '" ' . $selected . '>' . $label . '</option>';
                     }
+
+                    // 6. Tutup tag </select>
                     $html .= '</select>';
+
+                    // 7. Return HTML dropdown
                     return $html;
                 })
 
                 ->addColumn('action', function ($row) {
-                    return view('pendaftaran.actions', compact('row'))->render();
+                    return view('pendaftar.actions', compact('row'))->render();
                 })
 
                 ->rawColumns(['no_hp_link', 'keterangan_dropdown', 'action'])

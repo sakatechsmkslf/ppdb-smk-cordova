@@ -1,6 +1,6 @@
  <div class="sidebar-brand">
      <!--begin::Brand Link-->
-     <a href="./index.html" class="brand-link">
+     <a href="{{ route('dashboard') }}" class="brand-link">
          <!--begin::Brand Image-->
          <img src="{{ asset('template/assets/img/logo.png') }}" alt="LOGO SMK" class="brand-image" />
          <!--end::Brand Image-->
@@ -24,7 +24,7 @@
                  </a>
              </li>
              <li class="nav-item">
-                 <a href="{{ route("pendaftaran.index") }}" class="nav-link">
+                 <a href="{{ route('pendaftaran.index') }}" class="nav-link">
                      <i class="nav-icon bi bi-people-fill"></i>
                      <p>Pendaftar</p>
                  </a>

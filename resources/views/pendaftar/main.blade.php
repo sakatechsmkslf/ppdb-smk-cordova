@@ -42,7 +42,7 @@
                                             <th>Gelombang</th>
                                             <th>No Pendaftaran</th>
                                             <th>Jurusan</th>
-                                            <th>Nama Lengkap</th>
+                                            <th>Nama</th>
                                             <th>No HP</th>
                                             <th>Jkel</th>
                                             <th>Asal Sekolah</th>
@@ -122,23 +122,20 @@
                     ]
                 });
 
-                // event change dropdown keterangan
-                // $(document).on('change', '.keterangan-select', function() {
-                //     var id = $(this).data('id');
-                //     var value = $(this).val();
-                //     $.ajax({
+                $(document).on('change', '.keterangan-select', function() {
+                    var id = $(this).data('id');
+                    var keterangan = $(this).val();
 
-                //         method: 'POST',
-                //         data: {
-                //             _token: '{{ csrf_token() }}',
-                //             id: id,
-                //             keterangan: value
-                //         },
-                //         success: function(res) {
-                //             console.log('Updated keterangan');
-                //         }
-                //     });
-                // });
+                    // AJAX update ke server
+                    $.ajax({
+                        url: '/update-keterangan',
+                        method: 'POST',
+                        data: {
+                            id: id,
+                            keterangan: keterangan
+                        }
+                    });
+                });
             });
         </script>
     @endpush
