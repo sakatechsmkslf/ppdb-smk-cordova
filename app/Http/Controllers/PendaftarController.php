@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AsalSekolah;
 use App\Models\Gelombang;
 use App\Models\Pendaftar;
 use Illuminate\Http\Request;
@@ -104,7 +105,8 @@ class PendaftarController extends Controller
     public function create()
     {
         $provinsi = \Indonesia::allProvinces();
-        return view('user.index', compact('provinsi'));
+        $asalSekolah = AsalSekolah::all();
+        return view('user.index', compact('provinsi', 'asalSekolah'));
     }
 
     /**
@@ -200,6 +202,15 @@ class PendaftarController extends Controller
         $imageNameAkta = time() . '.' . $request->aktalahir->extension();
         $imageAkta = $manager->read($request->file('aktalahir'));
         $imageAkta->encode(new AutoEncoder(50))->save(public_path('akta/' . $imageNameAkta));
+
+
+        //buat sekolah:
+        $dataAsalSekolah = AsalSekolah::where('nama_sekolah', 'LIKE', "%{$request->asalsekolah}%")->exists();
+        if (!$dataAsalSekolah) {
+            AsalSekolah::create([
+                "nama_sekolah" => $request->asalsekolah
+            ]);
+        }
 
         $pendaftar = Pendaftar::create([
             "gelombang_id" => $gelombangAktif->id,
