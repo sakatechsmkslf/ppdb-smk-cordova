@@ -45,7 +45,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('pendaftaran.create') }}">Daftar</a>
+                            <a class="nav-link text-white" href="{{ route('viewUser') }}">Daftar</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('informasi.index') }}">Informasi</a>
@@ -79,11 +79,62 @@
 
             <div class="mt-3">
                 <a href="{{ route('informasi.index') }}" class="text-white text-decoration-none me-3">Informasi</a>
-                <a href="{{ route('daftar') }}" class="text-white text-decoration-none">Daftar</a>
+                <a href="{{ route('viewUser') }}" class="text-white text-decoration-none">Daftar</a>
             </div>
 
         </div>
     </footer>
+
+
+    <!-- Tempatkan skrip notifikasi di sini -->
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 3000, // Notifikasi akan hilang setelah 3 detik
+                    toast: true,
+                    position: 'top-end'
+                });
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: '{{ session('error') }}',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#dc3545'
+                });
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var errorMessages = '';
+                @foreach ($errors->all() as $error)
+                    errorMessages += '{{ $error }}\n';
+                @endforeach
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Terjadi Kesalahan!',
+                    text: errorMessages.trim(),
+                    confirmButtonText: 'Perbaiki',
+                    confirmButtonColor: '#ffc107'
+                });
+            });
+        </script>
+    @endif
 
 </body>
 

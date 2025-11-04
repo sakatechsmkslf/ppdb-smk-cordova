@@ -690,6 +690,7 @@
                     </div>
                 </div>
             </form>
+            
         </div>
     </div>
     <!--end::Row-->
