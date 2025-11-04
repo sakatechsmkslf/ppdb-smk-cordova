@@ -242,6 +242,12 @@
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">Kabupaten <span class="text-danger">*</span></label>
                                 <select name="kabupaten" id="kabupaten" class="form-select sel2" required>
+                                    @foreach (DB::table('indonesia_cities')->where('id', $pendaftaran->kabupaten)->get() as $item)
+                                        <option value="{{ $item->id ?? '' }}"
+                                            {{ old('kabupaten', $pendaftaran->kabupaten) == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name ?? '' }}
+                                        </option>
+                                    @endforeach
                                     <option value="">Pilih Kabupaten</option>
                                 </select>
                                 @error('kabupaten')
@@ -251,6 +257,12 @@
                             <div class="col-md-3 mb-3">
                                 <label class="form-label fw-bold">Kecamatan <span class="text-danger">*</span></label>
                                 <select name="kecamatan" id="kecamatan" class="form-select sel2" required>
+                                    @foreach (DB::table('indonesia_districts')->where('id', $pendaftaran->kecamatan)->get() as $item)
+                                        <option value="{{ $item->id ?? '' }}"
+                                            {{ old('kecamatan', $pendaftaran->kecamatan) == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name ?? '' }}
+                                        </option>
+                                    @endforeach
                                     <option value="">Pilih Kecamatan</option>
                                 </select>
                                 @error('kecamatan')
@@ -261,6 +273,12 @@
                                 <label class="form-label fw-bold">Desa/Kelurahan <span
                                         class="text-danger">*</span></label>
                                 <select name="desa" id="desa" class="form-select sel2" required>
+                                    @foreach (DB::table('indonesia_villages')->where('id', $pendaftaran->desa)->get() as $item)
+                                        <option value="{{ $item->id ?? '' }}"
+                                            {{ old('desa', $pendaftaran->desa) == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name ?? '' }}
+                                        </option>
+                                    @endforeach
                                     <option value="">Pilih Desa</option>
                                 </select>
                                 @error('desa')
@@ -690,169 +708,193 @@
                     </div>
                 </div>
             </form>
+            
         </div>
     </div>
     <!--end::Row-->
 @endsection
 
 @push('script')
-<!-- Include Select2 CSS and JS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Include Select2 CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    $(document).ready(function() {
-        // Inisialisasi Select2
-        $('.sel2').select2({
-            theme: 'bootstrap-5',
-            width: '100%',
-            placeholder: function() {
-                return $(this).data('placeholder') || 'Pilih';
-            }
-        });
-
-        // --- FUNSI PENTING: Cari ID berdasarkan Nama ---
-        function getIdFromName(selectId, name) {
-            if (!name) return null;
-            var $selectedOption = $('#' + selectId + ' option').filter(function() {
-                return $(this).text().trim() === name.trim();
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi Select2
+            $('.sel2').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: function() {
+                    return $(this).data('placeholder') || 'Pilih';
+                }
             });
-            if ($selectedOption.length > 0) {
-                return $selectedOption.val();
-            }
-            return null;
-        }
 
-        // --- AMBIL NAMA DARI DATABASE ---
-        var provName = "{{ $pendaftaran->provinsi }}";
-        var kabName = "{{ $pendaftaran->kabupaten }}";
-        var kecName = "{{ $pendaftaran->kecamatan }}";
-        var desaName = "{{ $pendaftaran->desa }}";
-        console.log("Initial Names from DB:", { provName, kabName, kecName, desaName });
-
-        // --- MULAI PROSES PENGISIAN DATA AWAL ---
-        var provId = getIdFromName('provinsi', provName);
-        console.log("Found Province ID:", provId, "for name:", provName);
-
-        if (provId) {
-            $('#provinsi').val(provId).trigger('change.select2');
-
-            // 2. Load Kabupaten, lalu cari ID dari nama
-            $.ajax({
-                url: '{{ route('cities') }}',
-                data: { id: provId }
-            }).then(function(data) {
-                console.log("AJAX Success: Data for Kabupaten received:", data);
-                $('#kabupaten').empty().append('<option value="">Pilih Kabupaten</option>');
-                $.each(data, function(key, value) {
-                    $('#kabupaten').append('<option value="' + key + '">' + value + '</option>');
+            // --- FUNSI PENTING: Cari ID berdasarkan Nama ---
+            function getIdFromName(selectId, name) {
+                if (!name) return null;
+                var $selectedOption = $('#' + selectId + ' option').filter(function() {
+                    return $(this).text().trim() === name.trim();
                 });
-
-                var kabId = getIdFromName('kabupaten', kabName);
-                console.log("Found Kabupaten ID:", kabId, "for name:", kabName);
-
-                if (kabId) {
-                    $('#kabupaten').val(kabId).trigger('change.select2');
-
-                    // 3. Load Kecamatan, lalu cari ID dari nama
-                    $.ajax({
-                        url: '{{ route('districts') }}',
-                        data: { id: kabId }
-                    }).then(function(data) {
-                        console.log("AJAX Success: Data for Kecamatan received:", data);
-                        $('#kecamatan').empty().append('<option value="">Pilih Kecamatan</option>');
-                        $.each(data, function(key, value) {
-                            $('#kecamatan').append('<option value="' + key + '">' + value + '</option>');
-                        });
-
-                        var kecId = getIdFromName('kecamatan', kecName);
-                        console.log("Found Kecamatan ID:", kecId, "for name:", kecName);
-
-                        if (kecId) {
-                            $('#kecamatan').val(kecId).trigger('change.select2');
-
-                            // 4. Load Desa, lalu cari ID dari nama
-                            $.ajax({
-                                url: '{{ route('villages') }}',
-                                data: { id: kecId }
-                            }).then(function(data) {
-                                console.log("AJAX Success: Data for Desa received:", data);
-                                $('#desa').empty().append('<option value="">Pilih Desa</option>');
-                                $.each(data, function(key, value) {
-                                    $('#desa').append('<option value="' + key + '">' + value + '</option>');
-                                });
-
-                                var desaId = getIdFromName('desa', desaName);
-                                console.log("Found Desa ID:", desaId, "for name:", desaName);
-
-                                if (desaId) {
-                                    $('#desa').val(desaId).trigger('change.select2');
-                                }
-                            });
-                        }
-                    });
+                if ($selectedOption.length > 0) {
+                    return $selectedOption.val();
                 }
-            });
-        }
+                return null;
+            }
 
-        // Fungsi AJAX untuk dropdown daerah (saat user mengubah pilihan)
-        function onChangeSelect(url, id, name) {
-            $.ajax({
-                url: url,
-                type: 'GET',
-                data: { id: id },
-                success: function(data) {
-                    $('#' + name).empty().append('<option value="">Pilih Salah Satu</option>');
+            // --- AMBIL NAMA DARI DATABASE ---
+            var provName = "{{ $pendaftaran->provinsi }}";
+            var kabName = "{{ $pendaftaran->kabupaten }}";
+            var kecName = "{{ $pendaftaran->kecamatan }}";
+            var desaName = "{{ $pendaftaran->desa }}";
+            console.log("Initial Names from DB:", {
+                provName,
+                kabName,
+                kecName,
+                desaName
+            });
+
+            // --- MULAI PROSES PENGISIAN DATA AWAL ---
+            var provId = getIdFromName('provinsi', provName);
+            console.log("Found Province ID:", provId, "for name:", provName);
+
+            if (provId) {
+                $('#provinsi').val(provId).trigger('change.select2');
+
+                // 2. Load Kabupaten, lalu cari ID dari nama
+                $.ajax({
+                    url: '{{ route('cities') }}',
+                    data: {
+                        id: provId
+                    }
+                }).then(function(data) {
+                    console.log("AJAX Success: Data for Kabupaten received:", data);
+                    $('#kabupaten').empty().append('<option value="">Pilih Kabupaten</option>');
                     $.each(data, function(key, value) {
-                        $('#' + name).append('<option value="' + key + '">' + value + '</option>');
+                        $('#kabupaten').append('<option value="' + key + '">' + value +
+                            '</option>');
                     });
-                    $('#' + name).trigger('change.select2');
-                }
+
+                    var kabId = getIdFromName('kabupaten', kabName);
+                    console.log("Found Kabupaten ID:", kabId, "for name:", kabName);
+
+                    if (kabId) {
+                        $('#kabupaten').val(kabId).trigger('change.select2');
+
+                        // 3. Load Kecamatan, lalu cari ID dari nama
+                        $.ajax({
+                            url: '{{ route('districts') }}',
+                            data: {
+                                id: kabId
+                            }
+                        }).then(function(data) {
+                            console.log("AJAX Success: Data for Kecamatan received:", data);
+                            $('#kecamatan').empty().append(
+                                '<option value="">Pilih Kecamatan</option>');
+                            $.each(data, function(key, value) {
+                                $('#kecamatan').append('<option value="' + key + '">' +
+                                    value + '</option>');
+                            });
+
+                            var kecId = getIdFromName('kecamatan', kecName);
+                            console.log("Found Kecamatan ID:", kecId, "for name:", kecName);
+
+                            if (kecId) {
+                                $('#kecamatan').val(kecId).trigger('change.select2');
+
+                                // 4. Load Desa, lalu cari ID dari nama
+                                $.ajax({
+                                    url: '{{ route('villages') }}',
+                                    data: {
+                                        id: kecId
+                                    }
+                                }).then(function(data) {
+                                    console.log("AJAX Success: Data for Desa received:",
+                                        data);
+                                    $('#desa').empty().append(
+                                        '<option value="">Pilih Desa</option>');
+                                    $.each(data, function(key, value) {
+                                        $('#desa').append('<option value="' + key +
+                                            '">' + value + '</option>');
+                                    });
+
+                                    var desaId = getIdFromName('desa', desaName);
+                                    console.log("Found Desa ID:", desaId, "for name:",
+                                        desaName);
+
+                                    if (desaId) {
+                                        $('#desa').val(desaId).trigger('change.select2');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Fungsi AJAX untuk dropdown daerah (saat user mengubah pilihan)
+            function onChangeSelect(url, id, name) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        id: id
+                    },
+                    success: function(data) {
+                        $('#' + name).empty().append('<option value="">Pilih Salah Satu</option>');
+                        $.each(data, function(key, value) {
+                            $('#' + name).append('<option value="' + key + '">' + value +
+                                '</option>');
+                        });
+                        $('#' + name).trigger('change.select2');
+                    }
+                });
+            }
+
+            // Event listener untuk perubahan user
+            $('#provinsi').on('change', function() {
+                onChangeSelect('{{ route('cities') }}', $(this).val(), 'kabupaten');
             });
-        }
+            $('#kabupaten').on('change', function() {
+                onChangeSelect('{{ route('districts') }}', $(this).val(), 'kecamatan');
+            });
+            $('#kecamatan').on('change', function() {
+                onChangeSelect('{{ route('villages') }}', $(this).val(), 'desa');
+            });
 
-        // Event listener untuk perubahan user
-        $('#provinsi').on('change', function() {
-            onChangeSelect('{{ route('cities') }}', $(this).val(), 'kabupaten');
-        });
-        $('#kabupaten').on('change', function() {
-            onChangeSelect('{{ route('districts') }}', $(this).val(), 'kecamatan');
-        });
-        $('#kecamatan').on('change', function() {
-            onChangeSelect('{{ route('villages') }}', $(this).val(), 'desa');
-        });
+            // Styling untuk status dropdown
+            $('#status').on('change', function() {
+                var status = $(this).val();
+                $(this).removeClass('bg-success bg-warning bg-danger text-white');
+                if (status === 'diterima') $(this).addClass('bg-success text-white');
+                else if (status === 'diproses') $(this).addClass('bg-warning text-white');
+                else if (status === 'ditolak') $(this).addClass('bg-danger text-white');
+            }).trigger('change');
 
-        // Styling untuk status dropdown
-        $('#status').on('change', function() {
-            var status = $(this).val();
-            $(this).removeClass('bg-success bg-warning bg-danger text-white');
-            if (status === 'diterima') $(this).addClass('bg-success text-white');
-            else if (status === 'diproses') $(this).addClass('bg-warning text-white');
-            else if (status === 'ditolak') $(this).addClass('bg-danger text-white');
-        }).trigger('change');
-
-        // Konfirmasi sebelum submit
-        $('form').on('submit', function(e) {
-            e.preventDefault();
-            const form = this;
-            Swal.fire({
-                title: 'Update Data Pendaftar?',
-                text: 'Pastikan semua data sudah benar',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Ya, Update!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
+            // Konfirmasi sebelum submit
+            $('form').on('submit', function(e) {
+                e.preventDefault();
+                const form = this;
+                Swal.fire({
+                    title: 'Update Data Pendaftar?',
+                    text: 'Pastikan semua data sudah benar',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#0d6efd',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Update!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 @endpush

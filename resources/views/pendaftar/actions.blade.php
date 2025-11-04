@@ -8,12 +8,12 @@
             <i class="bi bi-eye-fill"></i>
         </a>
 
-        <a href="" target="_blank" class="btn btn-sm btn-success" title="Print">
+        <a href="{{ route('print.formulir',$row->id) }}" target="_blank" class="btn btn-sm btn-success" title="Print">
             <i class="bi bi-printer"></i>
         </a>
     </div>
 
-    <form action="{{ route('gelombang.destroy', $row->id) }}" method="POST" class="d-inline">
+    <form action="{{ route('pendaftaran.destroy', parameters: $row->id) }}" method="POST" class="d-inline">
         @csrf
         @method('DELETE')
         <button type="submit" class="btn btn-sm btn-danger btn-delete" title="Delete">

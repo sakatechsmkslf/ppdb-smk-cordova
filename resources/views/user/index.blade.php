@@ -69,7 +69,7 @@
 
 @section('main')
 
-    <form action="{{ route('pendaftaran.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('createUser') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="card mb-4">
             <div class="card-header bg-success bg-gradient text-white">
