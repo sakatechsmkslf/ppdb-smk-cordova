@@ -45,59 +45,50 @@ class PendaftarController extends Controller
             return DataTables::of($query)
                 ->addIndexColumn()
 
-                // kolom gelombang -> tampilkan judul
                 ->addColumn('gelombang', function ($row) {
                     return $row->gelombang->judul ?? '-';
                 })
 
-                // kolom no_hp -> link ke WhatsApp
                 ->addColumn('no_hp_link', function ($row) {
                     $no = preg_replace('/[^0-9]/', '', $row->no_hp);
 
-                    // Ganti 0 di awal dengan 62
                     if (substr($no, 0, 1) === '0') {
                         $no = '62' . substr($no, 1);
                     }
 
                     return '<a href="https://wa.me/' . $no . '" target="_blank" class="d-flex align-items-center">
-            <i class="bi bi-whatsapp me-1 text-success"></i> ' . $row->no_hp . '
-        </a>';
+                    <i class="bi bi-whatsapp me-1 text-success"></i>' . $row->no_hp . '
+                </a>';
                 })
 
-                // kolom keterangan -> dropdown
-                ->addColumn('keterangan_dropdown', function ($row) {
-                    // 1. Definisi opsi dropdown
-                    $options = [
-                        'diterima' => 'Di Terima',  // value => label
-                        'diproses' => 'Di Proses',
-                        'ditolak' => 'Di Tolak'
+                ->addColumn('keterangan', function ($row) {
+
+                    $badges = [
+                        'diterima' => '<span class="badge bg-success">Diterima</span>',
+                        'diproses' => '<span class="badge bg-warning text-dark">Diproses</span>',
+                        'ditolak' => '<span class="badge bg-danger">Ditolak</span>',
                     ];
 
-                    // 2. Buat tag <select> dengan class dan data-id
-                    $html = '<select class="form-select form-select-sm keterangan-select" data-id="' . $row->id . '">';
+                    $badge = $badges[$row->status] ?? '<span class="badge bg-secondary">Tidak Diketahui</span>';
 
-                    // 3. Loop setiap opsi untuk membuat <option>
-                    foreach ($options as $key => $label) {
-                        // 4. Cek apakah value ini sama dengan data di database
-                        $selected = $row->keterangan === $key ? 'selected' : '';
+                    // // Render tombol dari partial Blade
+                    // $actions = view('pendaftar.actions', compact('row'))->render();
 
-                        // 5. Buat tag <option>
-                        $html .= '<option value="' . $key . '" ' . $selected . '>' . $label . '</option>';
-                    }
+                    return '
+        <div class="d-flex align-items-center gap-2">
+            ' . $badge . '
 
-                    // 6. Tutup tag </select>
-                    $html .= '</select>';
-
-                    // 7. Return HTML dropdown
-                    return $html;
+        </div>
+    ';
                 })
 
-                ->addColumn('action', function ($row) {
+                ->addColumn('actions', function ($row) {
                     return view('pendaftar.actions', compact('row'))->render();
                 })
 
-                ->rawColumns(['no_hp_link', 'keterangan_dropdown', 'action'])
+                ->rawColumns(['no_hp_link', 'keterangan', 'actions'])
                 ->make(true);
+
         }
 
         return view('pendaftar.main');
@@ -281,7 +272,7 @@ class PendaftarController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success','anda berhasil mendaftar');
+        return redirect()->back()->with('success', 'anda berhasil mendaftar');
     }
     /**
      * Show the form for creating a new resource.
@@ -338,7 +329,7 @@ class PendaftarController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return redirect()->route('pendaftaran.create')->withErrors($validate)->withInput()->with('error','ada eror');
+            return redirect()->route('pendaftaran.create')->withErrors($validate)->withInput()->with('error', 'ada eror');
         }
 
         $gelombangAktif = Gelombang::where('is_active', 'ya')->first();
@@ -468,7 +459,7 @@ class PendaftarController extends Controller
             ]);
         }
 
-        return redirect()->route('pendaftaran.index')->with('success','anda berhasil mendaftar');
+        return redirect()->route('pendaftaran.index')->with('success', 'anda berhasil mendaftar');
     }
 
     /**
@@ -701,7 +692,7 @@ class PendaftarController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success','anda berhasil mendaftar');
+        return redirect()->back()->with('success', 'anda berhasil mendaftar');
     }
 
     /**
@@ -716,5 +707,57 @@ class PendaftarController extends Controller
         $target = Pendaftar::find($id);
         $target->delete();
         return redirect()->route('pendaftaran.index')->with('success', 'Berhasil Hapus User');
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            // Validasi input
+            $validated = $request->validate([
+                'status' => 'required|in:diproses,diterima,ditolak'
+            ]);
+
+            // Cari data pendaftar berdasarkan ID
+            $pendaftar = Pendaftar::findOrFail($id);
+
+            // Update hanya kolom keterangan/status
+            $pendaftar->status = $validated['status'];
+
+            // Simpan perubahan
+            $pendaftar->save();
+
+            // Return response sukses
+            return response()->json([
+                'success' => true,
+                'message' => 'Status pendaftar berhasil diupdate!',
+                'data' => [
+                    'id' => $pendaftar->id,
+                    'status' => $pendaftar->status,
+                    'nama' => $pendaftar->nama_lengkap
+                ]
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Error validasi
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak valid',
+                'errors' => $e->validator->errors()
+            ], 422);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Data tidak ditemukan
+            return response()->json([
+                'success' => false,
+                'message' => 'Data pendaftar tidak ditemukan'
+            ], 404);
+
+        } catch (\Exception $e) {
+            // Error lainnya
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

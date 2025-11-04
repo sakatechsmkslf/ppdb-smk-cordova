@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="{{ asset('template/css/adminlte.min.css') }}">
 
 <!-- DataTables CSS -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">

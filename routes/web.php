@@ -52,5 +52,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('gelombang', GelombangController::class);
     Route::resource('pendaftaran', PendaftarController::class);
 
+    Route::post('/pendaftaran/{id}/update-status', [PendaftarController::class, 'updateStatus'])
+    ->name('pendaftaran.updateStatus');
+
 });
 
